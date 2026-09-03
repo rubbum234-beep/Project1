@@ -24,7 +24,7 @@ export function Hero() {
         </div>
       </div>
       <figure className="hero-media">
-        <img src={heroImage} alt={content.name[locale]} width={900} height={1200} />
+        <img src={heroImage} alt={content.name[locale]} width={800} height={800} />
       </figure>
     </section>
   );

@@ -45,8 +45,8 @@ export default function App() {
     <I18nContext.Provider value={value}>
       <div className="page">
         <Header />
-        <Hero />
         <main>
+          <Hero />
           <About />
           <Skills />
           <Projects />
