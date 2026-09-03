@@ -171,7 +171,7 @@ main {
   gap: 32px;
   align-items: center;
   padding: 48px 0 24px;
-  scroll-margin-top: 84px;
+  scroll-margin-top: 96px;
 }
 
 .hero-copy {
@@ -268,7 +268,7 @@ main {
 
 .section {
   padding: 56px 0 8px;
-  scroll-margin-top: 84px;
+  scroll-margin-top: 96px;
 }
 
 .section h2 {

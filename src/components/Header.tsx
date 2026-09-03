@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../useI18n";
 import { LanguageSwitch } from "./LanguageSwitch";
 import { ThemeToggle } from "./ThemeToggle";
@@ -10,43 +10,61 @@ type HeaderProps = {
   onToggleTheme: () => void;
 };
 
+function headerOffset() {
+  const header = document.querySelector(".site-header");
+  const height = header instanceof HTMLElement ? header.offsetHeight : 72;
+  return height + 28;
+}
+
+function sectionFromScroll() {
+  const offset = headerOffset();
+  const nearBottom =
+    window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 32;
+
+  if (nearBottom) {
+    return NAV_IDS[NAV_IDS.length - 1];
+  }
+
+  let current = "";
+  for (const id of NAV_IDS) {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top <= offset) {
+      current = id;
+    }
+  }
+  return current;
+}
+
 export function Header({ theme, onToggleTheme }: HeaderProps) {
   const { t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
+  const lockUntil = useRef(0);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    const sync = () => {
+      setScrolled(window.scrollY > 12);
+      if (Date.now() < lockUntil.current) {
+        return;
+      }
+      setActive(sectionFromScroll());
+    };
+
+    sync();
+    window.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    return () => {
+      window.removeEventListener("scroll", sync);
+      window.removeEventListener("resize", sync);
+    };
   }, []);
 
-  useEffect(() => {
-    const sections = NAV_IDS.map((id) => document.getElementById(id)).filter(
-      (el): el is HTMLElement => Boolean(el),
-    );
-    if (!sections.length) {
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-        if (visible?.target.id) {
-          setActive(visible.target.id);
-        }
-      },
-      { rootMargin: "-35% 0px -50% 0px", threshold: [0.1, 0.25, 0.5] },
-    );
-
-    for (const section of sections) {
-      observer.observe(section);
-    }
-    return () => observer.disconnect();
-  }, []);
+  const goTo = (id: string) => {
+    setActive(id);
+    lockUntil.current = Date.now() + 2000;
+    const target = id ? document.getElementById(id) : document.getElementById("top");
+    target?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const links = [
     { id: "about", label: t.nav.about },
@@ -57,7 +75,15 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
 
   return (
     <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
-      <a className="logo" href="#top">
+      <a
+        className="logo"
+        href="#top"
+        onClick={(event) => {
+          event.preventDefault();
+          goTo("");
+          history.replaceState(null, "", "#top");
+        }}
+      >
         AN
       </a>
       <nav className="nav" aria-label="Primary">
@@ -67,6 +93,11 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
             href={`#${link.id}`}
             className={active === link.id ? "is-active" : ""}
             aria-current={active === link.id ? "location" : undefined}
+            onClick={(event) => {
+              event.preventDefault();
+              goTo(link.id);
+              history.replaceState(null, "", `#${link.id}`);
+            }}
           >
             {link.label}
           </a>
