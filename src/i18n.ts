@@ -13,12 +13,6 @@ export const translations = {
       viewProjects: "View projects",
       writeMe: "Write me",
     },
-    theme: {
-      light: "Light",
-      dark: "Dark",
-      toLight: "Switch to light theme",
-      toDark: "Switch to dark theme",
-    },
     about: {
       title: "About",
     },
@@ -63,12 +57,6 @@ export const translations = {
       basedIn: "Живу в",
       viewProjects: "К проектам",
       writeMe: "Написать",
-    },
-    theme: {
-      light: "Светлая",
-      dark: "Тёмная",
-      toLight: "Включить светлую тему",
-      toDark: "Включить тёмную тему",
     },
     about: {
       title: "Обо мне",

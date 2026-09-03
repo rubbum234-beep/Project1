@@ -1,14 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useI18n } from "../useI18n";
 import { LanguageSwitch } from "./LanguageSwitch";
-import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_IDS = ["about", "skills", "projects", "contact"] as const;
-
-type HeaderProps = {
-  theme: "dark" | "light";
-  onToggleTheme: () => void;
-};
 
 function headerOffset() {
   const header = document.querySelector(".site-header");
@@ -35,7 +29,7 @@ function sectionFromScroll() {
   return current;
 }
 
-export function Header({ theme, onToggleTheme }: HeaderProps) {
+export function Header() {
   const { t } = useI18n();
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState<string>("");
@@ -104,7 +98,6 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
         ))}
       </nav>
       <div className="header-tools">
-        <ThemeToggle theme={theme} onToggle={onToggleTheme} />
         <LanguageSwitch />
       </div>
     </header>

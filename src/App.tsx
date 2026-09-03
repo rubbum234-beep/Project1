@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Locale } from "./i18n";
 import { translations } from "./i18n";
 import { I18nContext } from "./useI18n";
-import { applyTheme, readTheme, type Theme } from "./theme";
+import { CodeMarquee } from "./components/CodeMarquee";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
@@ -23,31 +23,19 @@ function readLocale(): Locale {
 
 export default function App() {
   const [locale, setLocaleState] = useState<Locale>(readLocale);
-  const [theme, setTheme] = useState<Theme>(() => {
-    const initial = readTheme();
-    applyTheme(initial);
-    return initial;
-  });
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    delete document.documentElement.dataset.theme;
+    localStorage.removeItem("portfolio-theme");
+  }, []);
 
   const setLocale = useCallback((next: Locale) => {
     setLocaleState(next);
     localStorage.setItem(STORAGE_KEY, next);
-  }, []);
-
-  const toggleTheme = useCallback(() => {
-    setTheme((current) => {
-      const next = current === "dark" ? "light" : "dark";
-      localStorage.setItem("portfolio-theme", next);
-      return next;
-    });
   }, []);
 
   const value = useMemo(
@@ -62,7 +50,8 @@ export default function App() {
   return (
     <I18nContext.Provider value={value}>
       <div className="page">
-        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <CodeMarquee />
+        <Header />
         <main>
           <Hero />
           <About />
