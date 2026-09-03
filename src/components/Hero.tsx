@@ -13,6 +13,11 @@ export function Hero() {
         </p>
         <h1>{content.name[locale]}</h1>
         <p className="role">{content.role[locale]}</p>
+        <ul className="hero-stack">
+          {content.stackLine.map((tech) => (
+            <li key={tech}>{tech}</li>
+          ))}
+        </ul>
         <p className="intro">{content.intro[locale]}</p>
         <div className="hero-actions">
           <a className="btn btn-primary" href="#projects">
