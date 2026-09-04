@@ -1,31 +1,35 @@
 import { type FormEvent, useState } from "react";
-import { content } from "../content";
+import { sendLead } from "../api";
+import { useContent } from "../useContent";
 import { useI18n } from "../useI18n";
 
 export function Contact() {
   const { t } = useI18n();
-  const { email, github, telegram, telegramHandle } = content.contacts;
-  const [status, setStatus] = useState<"idle" | "error" | "sent">("idle");
+  const { contacts } = useContent();
+  const { email, github, telegram, telegramHandle } = contacts;
+  const [status, setStatus] = useState<"idle" | "sending" | "error" | "sent">("idle");
+  const githubLabel = github.replace(/^https?:\/\//, "").replace(/\/$/, "");
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
     const name = String(data.get("name") ?? "").trim();
-    const from = String(data.get("email") ?? "").trim();
     const message = String(data.get("message") ?? "").trim();
-    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(from);
 
-    if (!name || !emailOk || message.length < 8) {
+    if (!name || !message) {
       setStatus("error");
       return;
     }
 
-    const subject = encodeURIComponent(`Portfolio — ${name}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name}\n${from}`);
-    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
-    setStatus("sent");
-    form.reset();
+    setStatus("sending");
+    try {
+      await sendLead({ name, message });
+      setStatus("sent");
+      form.reset();
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
@@ -41,7 +45,7 @@ export function Contact() {
           <li>
             <span>{t.contact.github}</span>
             <a href={github} target="_blank" rel="noreferrer">
-              github.com/example
+              {githubLabel}
             </a>
           </li>
           <li>
@@ -54,18 +58,14 @@ export function Contact() {
         <form className="contact-form" onSubmit={onSubmit} noValidate>
           <label>
             {t.contact.formName}
-            <input name="name" type="text" autoComplete="name" required />
-          </label>
-          <label>
-            {t.contact.formEmail}
-            <input name="email" type="email" autoComplete="email" required />
+            <input name="name" type="text" autoComplete="name" required maxLength={120} />
           </label>
           <label>
             {t.contact.formMessage}
-            <textarea name="message" rows={5} required minLength={8} />
+            <textarea name="message" rows={5} required maxLength={4000} />
           </label>
-          <button className="btn btn-primary" type="submit">
-            {t.contact.formSend}
+          <button className="btn btn-primary" type="submit" disabled={status === "sending"}>
+            {status === "sending" ? t.contact.formSending : t.contact.formSend}
           </button>
           {status === "error" && <p className="form-note is-error">{t.contact.formError}</p>}
           {status === "sent" && <p className="form-note">{t.contact.formSent}</p>}

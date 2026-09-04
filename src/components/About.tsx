@@ -1,8 +1,9 @@
-import { content } from "../content";
+import { useContent } from "../useContent";
 import { useI18n } from "../useI18n";
 
 export function About() {
   const { locale, t } = useI18n();
+  const content = useContent();
 
   return (
     <section className="section" id="about">

@@ -1,8 +1,9 @@
-import { content } from "../content";
+import { useContent } from "../useContent";
 import { useI18n } from "../useI18n";
 
 export function Skills() {
   const { t } = useI18n();
+  const content = useContent();
   const groups = [
     { key: "frontend" as const, items: content.skills.frontend },
     { key: "backend" as const, items: content.skills.backend },

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Locale } from "./i18n";
 import { translations } from "./i18n";
 import { I18nContext } from "./useI18n";
+import { ContentProvider } from "./useContent";
 import { CodeMarquee } from "./components/CodeMarquee";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
@@ -49,18 +50,20 @@ export default function App() {
 
   return (
     <I18nContext.Provider value={value}>
-      <div className="page">
-        <CodeMarquee />
-        <Header />
-        <main>
-          <Hero />
-          <About />
-          <Skills />
-          <Projects />
-          <Contact />
-        </main>
-        <Footer />
-      </div>
+      <ContentProvider>
+        <div className="page">
+          <CodeMarquee />
+          <Header />
+          <main>
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <Contact />
+          </main>
+          <Footer />
+        </div>
+      </ContentProvider>
     </I18nContext.Provider>
   );
 }

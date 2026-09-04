@@ -1,9 +1,10 @@
-import { content } from "../content";
 import heroImage from "../assets/hero.png";
+import { useContent } from "../useContent";
 import { useI18n } from "../useI18n";
 
 export function Hero() {
   const { locale, t } = useI18n();
+  const content = useContent();
 
   return (
     <section className="hero" id="top">

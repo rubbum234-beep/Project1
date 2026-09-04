@@ -1,4 +1,41 @@
-export const content = {
+export type LocaleText = {
+  en: string;
+  ru: string;
+};
+
+export type PortfolioProject = {
+  id: string;
+  title: string;
+  cover: "notes" | "dashboard" | "board";
+  stack: string[];
+  demo: string;
+  github: string;
+  contribution: LocaleText;
+  description: LocaleText;
+};
+
+export type PortfolioContent = {
+  name: LocaleText;
+  role: LocaleText;
+  location: LocaleText;
+  intro: LocaleText;
+  about: { en: string[]; ru: string[] };
+  skills: {
+    frontend: string[];
+    backend: string[];
+    tools: string[];
+  };
+  stackLine: string[];
+  projects: PortfolioProject[];
+  contacts: {
+    email: string;
+    github: string;
+    telegram: string;
+    telegramHandle: string;
+  };
+};
+
+export const content: PortfolioContent = {
   name: {
     en: "Alex Novikov",
     ru: "Алекс Новиков",
@@ -89,4 +126,4 @@ export const content = {
     telegram: "https://t.me/alexnovikov_demo",
     telegramHandle: "@alexnovikov_demo",
   },
-} as const;
+};

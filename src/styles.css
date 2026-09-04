@@ -552,6 +552,11 @@ main {
   justify-self: start;
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 .form-note {
   color: var(--muted);
   font-size: 0.9rem;
