@@ -5,6 +5,7 @@ import { I18nContext } from "./useI18n";
 import { ContentProvider } from "./useContent";
 import { CodeMarquee } from "./components/CodeMarquee";
 import { About } from "./components/About";
+import { Chat } from "./components/Chat";
 import { Contact } from "./components/Contact";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
@@ -62,6 +63,7 @@ export default function App() {
             <Contact />
           </main>
           <Footer />
+          <Chat />
         </div>
       </ContentProvider>
     </I18nContext.Provider>
