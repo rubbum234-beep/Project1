@@ -23,11 +23,16 @@ export async function sendLead(payload: {
 }
 
 export async function sendChat(messages: ChatMessage[]): Promise<ChatMessage> {
-  const response = await fetch(`${API_BASE}/api/chat`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ messages }),
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE}/api/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages }),
+    });
+  } catch {
+    throw new Error("Cannot reach the server. Check your connection and try again.");
+  }
 
   const data = (await response.json().catch(() => null)) as
     | { message?: ChatMessage; error?: string }

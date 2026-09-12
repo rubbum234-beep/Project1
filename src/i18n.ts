@@ -55,7 +55,7 @@ export const translations = {
       fab: "Chat",
       open: "Open chat",
       close: "Close chat",
-      error: "Could not get a reply. Check that the API key is set on the backend.",
+      error: "Could not get a reply. The AI service may be busy — try again in a few seconds.",
     },
     footer: {
       rights: "Test portfolio data. Not a real person.",
@@ -115,7 +115,7 @@ export const translations = {
       fab: "Чат",
       open: "Открыть чат",
       close: "Закрыть чат",
-      error: "Не удалось получить ответ. Проверьте, что API-ключ задан на бэкенде.",
+      error: "Не удалось получить ответ. Сервис ИИ может быть занят — подождите пару секунд и попробуйте снова.",
     },
     footer: {
       rights: "Тестовые данные портфолио. Не реальный человек.",
